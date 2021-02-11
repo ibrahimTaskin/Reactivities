@@ -22,17 +22,17 @@ namespace API.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Value>>> Get()
+        public async Task<ActionResult<IEnumerable<Activity>>> Get()
         {
-            var values = await _context.Values.ToListAsync();
+            var values = await _context.Activities.ToListAsync();
             return Ok(values);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Value>> Get(int id)
+        public async Task<ActionResult<Activity>> Get(int id)
         {
-            var value = await _context.Values.FindAsync(id);
+            var value = await _context.Activities.FindAsync(id);
             return Ok(value);
         }
 
@@ -40,10 +40,7 @@ namespace API.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
-            var model = new Value
-            {
-                Name = value
-            };
+          
 
             
         }

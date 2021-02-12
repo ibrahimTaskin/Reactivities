@@ -1,18 +1,17 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Domain;
 using MediatR;
 using Persistence;
 
 namespace Application.Activities
 {
-    public class Edit
+    public class Delete
     {
-        public class Command : IRequest
-        {
-            public Activity Activity { get; set; }
-        }
+        public class Command : IRequest {
+            public Guid Id { get; set; }
+         }
 
         public class Handler : IRequestHandler<Command>
         {
@@ -26,13 +25,10 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                // Hangi entity
-                var activity = await _context.Activities.FindAsync(request.Activity.Id);
+               var activity=await _context.Activities.FindAsync(request.Id);
 
-                // Kaynak entity, değişecek olan
-                _mapper.Map(request.Activity, activity);
+                _context.Remove(activity);
 
-                //_context.Update(activity);
                 await _context.SaveChangesAsync();
 
                 return Unit.Value;

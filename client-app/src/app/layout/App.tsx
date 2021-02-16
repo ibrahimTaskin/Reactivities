@@ -10,21 +10,14 @@ import LoadingComponent from "./LoadingComponent";
 function App() {
   // useState<Activity[]> Activity array i şeklinde alıyoruz.
   const [activities, setActivities] = useState<Activity[]>([]); // array verdiğimiz için array almalı
-  const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined); //Activity veya undenifed gelebilir.
+  const [selectedActivity, setSelectedActivity] = useState<
+    Activity | undefined
+  >(undefined); //Activity veya undenifed gelebilir.
   const [editMode, setEditMode] = useState(false);
-  const[loading,setLoading]=useState(true);
-  const[submitting,setSubmitting]=useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    //axios.get<Activity[]> ,Herhangi bir type vermeyebiliriz. Fakat Activity istiyoruz
-    //Amaç Type Safety
-    //   axios
-    //     .get<Activity[]>("http://localhost:5000/api/activities")
-    //     .then((response) => {
-    //       setActivities(response.data);
-    //     });
-
-    // Yazdığımız agent ile kullanım
     agent.Activities.list().then((response) => {
       // listeyi boş bir array a aldık.Foreach ile döndük ve tarih'ten saati attık.
       // activities.push ile tekrar aldık. ve setActivities ile geri döndük.
@@ -61,29 +54,33 @@ function App() {
 
     // Eğer id varsa update
     if (activity.id) {
-      agent.Activities.update(activity).then(()=>{
-         setActivities([...activities.filter((x) => x.id !== activity.id),activity,]);
-         setSelectedActivity(activity);
-         setEditMode(false); // update açık olacağı için edit kapalı
-         setSubmitting(false);
+      agent.Activities.update(activity).then(() => {
+        setActivities([...activities.filter((x) => x.id !== activity.id),activity]);
+        setSelectedActivity(activity);
+        setEditMode(false); // update açık olacağı için edit kapalı
+        setSubmitting(false);
       });
-    }else{
-      agent.Activities.create(activity).then(()=>{
-        activity.id=uuid();
+    } else {
+      activity.id = uuid();
+      agent.Activities.create(activity).then(() => {
         setActivities([...activities, activity]); // Eğer id yoksa yeni bir Guid ile entity oluştur.
         setSelectedActivity(activity);
         setEditMode(false);
         setSubmitting(false);
-      })
+      });
     }
-    
   }
 
   function handleDeleteActivity(id: string) {
-    setActivities([...activities.filter((x) => x.id !== id)]);
+    setSubmitting(true);
+    agent.Activities.delete(id).then(response=>{
+      setActivities([...activities.filter((x) => x.id !== id)]);
+      setSubmitting(false);
+    });
+    
   }
 
-if (loading) return <LoadingComponent  content='Loading App...'/>
+  if (loading) return <LoadingComponent content="Loading App..." />;
 
   return (
     <>

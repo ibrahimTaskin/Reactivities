@@ -13,6 +13,7 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined); //Activity veya undenifed gelebilir.
   const [editMode, setEditMode] = useState(false);
   const[loading,setLoading]=useState(true);
+  const[submitting,setSubmitting]=useState(false);
 
   useEffect(() => {
     //axios.get<Activity[]> ,Herhangi bir type vermeyebiliriz. Fakat Activity istiyoruz
@@ -55,15 +56,27 @@ function App() {
   }
 
   function handleCreateOrEditActivity(activity: Activity) {
-    activity.id
-      ? setActivities([
-          ...activities.filter((x) => x.id !== activity.id),
-          activity,
-        ]) //Eğer id'ye sahip entity varsa getir. Düzenle
-      : setActivities([...activities, { ...activity, id: uuid() }]); // Eğer id yoksa yeni bir Guid ile entity oluştur.
+    // subbmitting i aç.
+    setSubmitting(true);
 
-    setEditMode(false);
-    setSelectedActivity(activity);
+    // Eğer id varsa update
+    if (activity.id) {
+      agent.Activities.update(activity).then(()=>{
+         setActivities([...activities.filter((x) => x.id !== activity.id),activity,]);
+         setSelectedActivity(activity);
+         setEditMode(false); // update açık olacağı için edit kapalı
+         setSubmitting(false);
+      });
+    }else{
+      agent.Activities.create(activity).then(()=>{
+        activity.id=uuid();
+        setActivities([...activities, activity]); // Eğer id yoksa yeni bir Guid ile entity oluştur.
+        setSelectedActivity(activity);
+        setEditMode(false);
+        setSubmitting(false);
+      })
+    }
+    
   }
 
   function handleDeleteActivity(id: string) {
@@ -86,6 +99,7 @@ if (loading) return <LoadingComponent  content='Loading App...'/>
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditActivity}
           deleteActivity={handleDeleteActivity}
+          submitting={submitting}
         />
       </Container>
     </>

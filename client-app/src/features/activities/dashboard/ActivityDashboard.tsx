@@ -14,8 +14,9 @@ interface Props {
   editMode: boolean;
   openForm: (id?: string) => void;
   closeForm: () => void;
-  createOrEdit:(activity:Activity)=>void;
-  deleteActivity:(id:string)=>void;
+  createOrEdit: (activity: Activity) => void;
+  deleteActivity: (id: string) => void;
+  submitting: boolean;
 }
 
 // artık Props ile activities gönderebiliriz.
@@ -27,7 +28,9 @@ function ActivityDashboard({
   editMode,
   openForm,
   closeForm,
-  createOrEdit,deleteActivity
+  createOrEdit,
+  deleteActivity,
+  submitting,
 }: Props) {
   return (
     <div>
@@ -40,16 +43,20 @@ function ActivityDashboard({
           />
         </Grid.Column>
         <Grid.Column width="6">
-          {selectedActivity && !editMode &&(
+          {selectedActivity && !editMode && (
             <ActivityDetails
               activity={selectedActivity}
               cancelSelectActivity={cancelSelectActivity}
               openForm={openForm}
-              
             />
           )}
           {editMode && (
-            <ActivityForm closeForm={closeForm} activity={selectedActivity} createOrEdit={createOrEdit} />
+            <ActivityForm
+              closeForm={closeForm}
+              activity={selectedActivity}
+              createOrEdit={createOrEdit}
+              submitting={submitting}
+            />
           )}
         </Grid.Column>
       </Grid>

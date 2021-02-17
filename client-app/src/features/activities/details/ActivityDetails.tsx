@@ -1,14 +1,17 @@
 import React from "react";
 import { Button, Card,  Image } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-interface Props{
-    activity:Activity;
-    cancelSelectActivity:()=>void;
-    openForm:(id?:string)=>void;
-}
+import { useStore } from "../../../app/stores/store";
 
-function ActivityDetails({activity,cancelSelectActivity,openForm}:Props) {
+
+function ActivityDetails() {
+
+  const {activityStore}=useStore();
+  const {selectedActivity:activity,cancelSelectedActivity,openForm,}=activityStore;
+
+  if (!activity) return <LoadingComponent/>;
+
   return (
       // Kategorinin fotosunu direk isminden aldık.
     <Card fluid>
@@ -25,7 +28,7 @@ function ActivityDetails({activity,cancelSelectActivity,openForm}:Props) {
       <Card.Content extra>
        <Button.Group widths='2'>
             <Button onClick={()=>openForm(activity.id)} basic color='blue' content='Edit' />
-            <Button onClick={cancelSelectActivity} basic color='grey' content='Cancel' />
+            <Button onClick={cancelSelectedActivity} basic color='grey' content='Cancel' />
        </Button.Group>
       </Card.Content>
     </Card>

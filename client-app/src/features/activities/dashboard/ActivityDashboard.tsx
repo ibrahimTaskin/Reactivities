@@ -9,11 +9,13 @@ import ActivityList from "./ActivityList";
 // artık Props ile activities gönderebiliriz.
 function ActivityDashboard() {
   const { activityStore } = useStore();
+  const {loadActivities,activityRegistry}=activityStore;
   
 
   useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
+    // eğer 1 aktiviteden küçük ve eşitse
+   if(activityRegistry.size<=1) loadActivities();
+  }, [activityRegistry.size,loadActivities]);
 
    
 

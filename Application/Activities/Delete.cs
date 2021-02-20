@@ -29,7 +29,7 @@ namespace Application.Activities
             {
                var activity=await _context.Activities.FindAsync(request.Id); // değer bulmazsa null döner.
 
-                if (activity==null) return null;
+                //if (activity==null) return null;
                 
                 _context.Remove(activity);
 

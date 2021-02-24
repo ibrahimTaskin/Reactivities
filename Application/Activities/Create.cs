@@ -15,7 +15,7 @@ namespace Application.Activities
         // Unit,MediatR'dan gelir. Geriye değer dönmez.
         public class Command : IRequest<Result<Unit>> 
         {
-            public Activity Activity { get; set; }
+            public Activity Activity { get; set; } //Aktivite gönderiyoruz
         }
 
 

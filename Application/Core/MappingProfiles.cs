@@ -3,6 +3,7 @@ using Domain;
 
 namespace Application.Core
 {
+    // AutoMapper
     public class MappingProfiles : Profile
     {
         public MappingProfiles()

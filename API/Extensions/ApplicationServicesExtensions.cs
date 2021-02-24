@@ -26,10 +26,12 @@ namespace API.Extensions
                 opt.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // Cross Origin Resource Sharing
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                  {
+                     // localHost:3000 e izin verdik.
                      policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
                  });
             });

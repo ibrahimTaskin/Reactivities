@@ -28,5 +28,10 @@ namespace Application.Activities
                 return Result<List<Activity>>.Success(activities);
             }
         }
+
+
     }
+
+
+   
 }
